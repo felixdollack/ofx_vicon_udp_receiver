@@ -160,12 +160,12 @@ void ViconReceiver::threadedFunction() {
         string message = _udpMessage;
         std::unique_lock<std::mutex> lock(mutex);
         if (message != "") {
-            //readEuler(message); // read position and euler angles
+            /*readEuler(message); // read position and euler angles
             readRawQuaternion(message); // read position and raw quaternion
-            convertQuaternionToHeadRotation();
-            smoothenHeadOrientation();
-            //readRawRotationMatrix(message); // read position and raw rotation matrix
+            convertQuaternionToHeadRotation();*/
+            readRawRotationMatrix(message); // read position and raw rotation matrix
             //readAll(message);
+            smoothenHeadOrientation();
         }
     }
 }
