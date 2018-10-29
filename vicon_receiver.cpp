@@ -109,6 +109,8 @@ void ViconReceiver::readRawRotationMatrix(string msg) {
     _buffer.rotation_matrix[6] = strtof(msgParts[10].c_str(),0);
     _buffer.rotation_matrix[7] = strtof(msgParts[11].c_str(),0);
     _buffer.rotation_matrix[8] = strtof(msgParts[12].c_str(),0);
+
+    _buffer.z_rotation = atan2f(_buffer.rotation_matrix[5], _buffer.rotation_matrix[2]) * (180/M_PI);
 }
 void ViconReceiver::readAll(string msg) {
     vector<string> msgParts = ofSplitString(msg, "/");
