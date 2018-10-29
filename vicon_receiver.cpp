@@ -7,8 +7,9 @@ ViconReceiver::~ViconReceiver(){
 }
 
 void ViconReceiver::setup(ofxUDPSettings settings) {
-    this->_sample2 = 0;
-    this->_sample1 = 0;
+    for (int kk=0; kk<this->_avg_samples; kk++) {
+        this->_old_samples.push_back(0.0f);
+    }
     _udpConnection.Setup(settings);
     start();
 }
@@ -36,12 +37,18 @@ void ViconReceiver::toEulerAngle(const ofQuaternion& q, double& roll, double& pi
 }
 
 void ViconReceiver::shiftFilterSamples() {
-    this->_sample2 = this->_sample1;
-    this->_sample1 = _buffer.z_rotation;
+    for (int kk=1; kk<this->_avg_samples; kk++) {
+        this->_old_samples[kk-1] = this->_old_samples[kk];
+    }
+    this->_old_samples[this->_avg_samples-1] = _buffer.z_rotation;
 }
 
 void ViconReceiver::smoothenHeadOrientation() {
-    _buffer.z_rot_avg = (this->_sample2 + this->_sample1 + _buffer.z_rotation)/3;
+    float tmp = 0;
+    for (int kk=0; kk<this->_avg_samples; kk++) {
+        tmp += this->_old_samples[kk];
+    }
+    _buffer.z_rot_avg = (tmp + _buffer.z_rotation)/(this->_avg_samples+1);
     shiftFilterSamples();
 }
 

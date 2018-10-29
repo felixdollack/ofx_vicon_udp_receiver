@@ -46,7 +46,8 @@ protected:
     char _udpMessage[maxMessageLen];
     ofxUDPManager _udpConnection;
     HeadPositionAndRotation _buffer;
-    float _sample2, _sample1;
+    int _avg_samples = 2;
+    vector<float> _old_samples;
 };
 
 #endif // _VICON_RECEIVER
