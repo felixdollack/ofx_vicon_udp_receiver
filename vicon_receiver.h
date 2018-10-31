@@ -33,6 +33,7 @@ public:
     void shiftFilterSamples();
     void smoothenHeadOrientation();
     void stop();
+    void read(string msg);
     void readEuler(string msg);
     void readRawQuaternion(string msg);
     void readRawRotationMatrix(string msg);

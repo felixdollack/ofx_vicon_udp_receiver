@@ -141,6 +141,16 @@ void ViconReceiver::readAll(string msg) {
     _buffer.rotation_matrix[8] = strtof(msgParts[19].c_str(),0);
 }
 
+void ViconReceiver::read(string msg) {
+    vector<string> msgParts = ofSplitString(msg, "/");
+    _buffer.time = strtof(msgParts[0].c_str(),0);
+    _buffer.x_position = strtof(msgParts[1].c_str(),0);
+    _buffer.y_position = strtof(msgParts[2].c_str(),0);
+    _buffer.z_position = strtof(msgParts[3].c_str(),0);
+    // rotation matrix
+    _buffer.z_rotation = strtof(msgParts[4].c_str(),0);
+}
+
 void ViconReceiver::convertQuaternionToHeadRotation() {
     double a,b,yaw;
     toEulerAngle(_buffer.q, a, b, yaw);
@@ -163,8 +173,9 @@ void ViconReceiver::threadedFunction() {
             /*readEuler(message); // read position and euler angles
             readRawQuaternion(message); // read position and raw quaternion
             convertQuaternionToHeadRotation();*/
-            readRawRotationMatrix(message); // read position and raw rotation matrix
+            //readRawRotationMatrix(message); // read position and raw rotation matrix
             //readAll(message);
+            read(message);
             smoothenHeadOrientation();
         }
     }
